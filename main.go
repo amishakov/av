@@ -8,7 +8,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func ExampleScrape() {
+func ParseAds() {
 	// Request the HTML page.
 	res, err := http.Get("https://www.avito.ru/moskva/noutbuki?cd=1&q=x1+carbon")
 	if err != nil {
@@ -25,9 +25,9 @@ func ExampleScrape() {
 		log.Fatal(err)
 	}
 
-	// Find the review items
+	// Find the ads
 	doc.Find(".layout-internal .l-content .catalog-content .catalog-main .item .item_table-header").Each(func(i int, s *goquery.Selection) {
-		// For each item found, get the band and title
+		// For each ad found, get the title, link and the price
 		link, _ := s.Find("a").Attr("href")
 		name := s.Find("h3").Text()
 		price := s.Find(".price").Text()
@@ -36,5 +36,5 @@ func ExampleScrape() {
 }
 
 func main() {
-	ExampleScrape()
+	ParseAds()
 }
