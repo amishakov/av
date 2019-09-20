@@ -4,13 +4,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-func ExampleScrape() {
+const (
+	Laptops string = "noutbuki"
+	Phones  string = "telefony"
+	PCs     string = "nastolnye_kompyutery"
+)
+
+func ParseAd(cat string, que string) {
 	// Request the HTML page.
-	res, err := http.Get("https://www.avito.ru/moskva/noutbuki?cd=1&q=x1+carbon")
+	res, err := http.Get(NewQueue(cat, que))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,15 +26,15 @@ func ExampleScrape() {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
-	// Load the HTML document
+	// Load the HTML document.
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Find the review items
+	// Find the ads.
 	doc.Find(".layout-internal .l-content .catalog-content .catalog-main .item .item_table-header").Each(func(i int, s *goquery.Selection) {
-		// For each item found, get the band and title
+		// For each ad found, get the link, price and title.
 		link, _ := s.Find("a").Attr("href")
 		name := s.Find("h3").Text()
 		price := s.Find(".price").Text()
@@ -35,6 +42,10 @@ func ExampleScrape() {
 	})
 }
 
+func NewQueue(cat string, que string) string { // Assuming we want to search in Moscow city.
+	return "https://www.avito.ru/moskva/" + cat + "?cd=1&q=" + strings.Replace(que, " ", "+", -1)
+}
+
 func main() {
-	ExampleScrape()
+	ParseAd(Phones, "iPhone 4 16gb")
 }
