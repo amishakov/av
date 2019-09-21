@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -43,7 +44,7 @@ func ParseAd(cat string, que string) {
 }
 
 func NewQueue(cat string, que string) string { // Assuming we want to search in Moscow city.
-	return "https://www.avito.ru/moskva/" + cat + "?cd=1&q=" + strings.Replace(que, " ", "+", -1)
+	return "https://www.avito.ru/moskva/" + url.QueryEscape(cat) + "?cd=1&q=" + strings.Replace(url.QueryEscape(que), " ", "+", -1)
 }
 
 func main() {
