@@ -1,8 +1,8 @@
 # av
 Simple Avito ads parser (HTML)
 
-# TODO:
+## TODO:
 Simple Telegram bot which supports querying... Maybe even DB to store results.
 
-# DONE:
+## DONE:
 URL maker
